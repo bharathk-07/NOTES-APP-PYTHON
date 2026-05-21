@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>My Notes</title>
+
+    <link rel="stylesheet"
+          href="/static/style.css">
+
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <div class="logo">
+            <h2>📒 My Notes</h2>
+            <p>Your thoughts, organized</p>
+        </div>
+
+        <!-- ADD NOTE -->
+
+        <form action="/add"
+              method="POST"
+              class="add-form">
+
+            <input type="text"
+                   name="title"
+                   placeholder="Note title..."
+                   required>
+
+            <textarea name="content"
+                      placeholder="Write your note..."
+                      required></textarea>
+
+            <button type="submit">
+                + Add Note
+            </button>
+
+        </form>
+
+        <!-- MENU -->
+
+        <div class="menu">
+
+            <h3>Menu</h3>
+
+            <ul>
+
+                <li>
+                    <a href="/">📁 All Notes</a>
+                </li>
+
+                <li>
+                    <a href="/favorites">⭐ Favorites</a>
+                </li>
+
+                <li>
+                    <a href="/trash">🗑 Trash</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+        <!-- SEARCH -->
+
+        <div class="topbar">
+
+            <input type="text"
+                   id="search"
+                   placeholder="🔍 Search notes...">
+
+        </div>
+
+        <h1>My Notes</h1>
+
+        <!-- NOTES -->
+
+        <div class="notes-grid">
+
+            {% for note in notes %}
+
+            <div class="note">
+
+                <h2>{{note[1]}}</h2>
+
+                <p>{{note[2]}}</p>
+
+                <span>
+                    📅 {{note[3]}}
+                </span>
+
+                <div class="actions">
+
+                    <!-- EDIT -->
+
+                    <button
+                    onclick="openEdit(
+                    '{{note[0]}}',
+                    `{{note[1]}}`,
+                    `{{note[2]}}`
+                    )">
+
+                    ✏ Edit
+
+                    </button>
+
+                    <!-- FAVORITE -->
+
+                    <a href="/favorite/{{note[0]}}">
+                        ⭐ Favorite
+                    </a>
+
+                    <!-- DELETE -->
+
+                    {% if note[5] == 0 %}
+
+                    <a href="/delete/{{note[0]}}">
+                        🗑 Delete
+                    </a>
+
+                    {% else %}
+
+                    <a href="/restore/{{note[0]}}">
+                        ♻ Restore
+                    </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- EDIT MODAL -->
+
+<div class="modal"
+     id="modal">
+
+    <div class="modal-content">
+
+        <span class="close"
+              onclick="closeModal()">
+
+              ×
+
+        </span>
+
+        <h2>Edit Note</h2>
+
+        <form id="editForm"
+              method="POST">
+
+            <input type="text"
+                   id="editTitle"
+                   name="title"
+                   required>
+
+            <textarea id="editContent"
+                      name="content"
+                      required></textarea>
+
+            <button type="submit">
+                Update Note
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script src="/static/script.js"></script>
+
+</body>
+</html>
